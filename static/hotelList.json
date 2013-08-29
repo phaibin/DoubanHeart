@@ -1,0 +1,68 @@
+{
+ "message": "success",
+ "code": 200,
+ "header": "",
+ "result":
+ {
+   "hotelList":
+   [
+   {
+     "lowestThirdPrice": 118,
+     "positiveCode": 2,
+     "hotelLatitude": "31.35948",
+     "positiveNum": "4.0",
+     "hotelId": "16036",
+     "distanceDesc": "距我400米",
+     "hasFreeNet": false,
+     "hotelLongitude": "121.43406",
+     "hasFreeBreakfast": false,
+     "tradeArea": "宝山",
+     "hotelNameZh": "上海康泰假日酒店",
+     "picture": "http://images.hubs1.net/images/1e5721cadff20f2a_200_150.jpg",
+     "distance": 0.4,
+     "starCode": 2,
+     "proDesc": "",
+     "starDesc": "经济型",
+     "hotelType": 1,
+     "lowestPrice": 88,
+     "hasRoom": true
+     },
+     {
+       "hotelLatitude": "31.359886",
+       "positiveCode": 2,
+       "positiveNum": "4.1",
+       "hotelId": "EL00201690",
+       "distanceDesc": "距我491米",
+       "hotelLongitude": "121.434238",
+       "tradeArea": "宝山",
+       "hotelNameZh": "上海康泰假日旅店",
+       "picture": "http://www.elongstatic.com/imageapp/hotels/hotelimages/0201/00201690/3_1e1cc170-eb47-4d98-9738-b605ddcf9f2d.jpg",
+       "distance": 0.4,
+       "starCode": 2,
+       "starDesc": "经济型",
+       "hotelType": 2,
+       "lowestPrice": 118,
+       "hasRoom": true
+     }
+     ],
+     "hasBar": true,
+     "hotelListType": "T",
+     "unopenText": ""
+     },
+     "page":
+     {
+       "currPage": 1,
+       "pageSize": 10,
+       "count": 2,
+       "totalPage": 1,
+       "hasPre": false,
+       "hasNext": false
+       },
+       "foot":
+       {
+         "operationTime": "2013-04-08 17:37:33",
+         "version": "",
+         "hostName": "Proxy"
+       }
+     }
+

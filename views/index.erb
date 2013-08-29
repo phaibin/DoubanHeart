@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>登录</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" media="screen">
+  <style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+  </style>
+  <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <form action="/" method="post">
+      <label for="username">username</label>
+      <input type="text" name="username" id="username"><br>
+      <label for="password">password</label>
+      <input type="password" name="password" id="password"><br>
+      <label for="captcha">captcha</label>
+      <input type="text" name="captcha" id="captcha"><br>
+      <img src="<%= captcha_url %>" alt=""><br><br>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.js"></script>
+</body>
+</html>

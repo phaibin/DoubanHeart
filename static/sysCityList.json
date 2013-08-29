@@ -1,0 +1,45 @@
+{
+ "message": "success",
+ "code": 200,
+ "header": "",
+ "result":
+ {
+   "title": "今夜酒店特价",
+   "cityListVersion": "13042919",
+   "isToday": true,
+   "sysinfo":
+   {
+     "warnContent": "",
+     "isForceExit": false,
+     "clientCode": "HOTELVP",
+     "paymentType": "11010000000000000000000000000000",
+     "cashMinAmount": 30,
+     "unionPayUrl": "https://online.unionpay.com",
+     "useCode": "IOS",
+     "serviceTel": "40010-51419",
+     "bookBegin": "18:00",
+     "alipayUrl": "https://www.alipay.com",
+     "bzxCount": 2352,
+     "bookEnd": "4:00",
+     "weiXinIsOpen": false,
+     "giveTicketForRegister": 40,
+     "bookSource": "LM_IOS"
+     },
+     "version":
+     {
+       "isForceUpgrade": false,
+       "versionDesc": "测试3.4",
+       "isUpgrade": false,
+       "upgradeUrl": "http://lm.huitongke.com:8180/passbook/chk-debug.apk",
+       "versionCode": "3.4",
+       "sysCode": "IOS"
+     }
+     },
+     "page": null,
+     "foot":
+     {
+       "operationTime": "2013-04-23 18:22:41",
+       "version": "",
+       "hostName": "thls-vm-tlmdb"
+     }
+   }

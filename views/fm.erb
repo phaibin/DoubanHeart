@@ -66,9 +66,6 @@
             <audio id="audio1" controls="controls" src="http://mr3.douban.com/201308290919/98ddae0e3cbdf1be94b6a83baedc5b5d/view/song/small/p529745.mp3" type="audio/mp3" >
               Your browser does not support the HTML5 Audio Tag.
             </audio>
-            <audio id="audio2" controls="controls" src="http://phaibin.qiniudn.com/p191913.mp3">
-              Your browser does not support the HTML5 Audio Tag.
-            </audio>
           </div>
           <noscript>Your browser does not support JavaScript or JavaScript has been disabled. You will need to enable JavaScript for this page.</noscript>
           <div id="extraControls" class="is-audio">
@@ -79,7 +76,8 @@
     </div>
   </div>
   <script>
-  $('audio,video').mediaelementplayer();
+  new MediaElementPlayer('audio1',{mode:'shim'});
+  $('audio,video').mediaelementplayer({mode:'shim'});
   </script>
 </body>
 </html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <title>上传</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" media="screen">
+  <style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+  </style>
+  <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div><input type="button" value="上传" id="upload"></div>
+    <div id="result">
+
+    </div>
+  </div>
+  <script>
+  function progress() {
+   var progress = setInterval(function() {
+    $.get("/status", function(data) {
+      if (data.status == "done") {
+        $("#result").text("done");
+        clearInterval(progress);
+      } else {
+        $("#result").text("正在上传 " + data.progress + "...");
+      }
+    });
+  }, 1000);
+ }
+ $(function() {
+  $("#upload").click(function() {
+    $.post("/upload", function(data, textStatus) {
+      $("#result").text(data);
+    });
+  });
+  $.get("/status", function(data) {
+    // alert(data.status);
+    if (data.status == "uploading") {
+      progress();
+    }
+  });
+});
+ </script>
+</body>
+</html>

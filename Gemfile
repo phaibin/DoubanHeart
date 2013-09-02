@@ -11,3 +11,4 @@ gem 'chronic_duration'
 gem "faraday"
 gem "faraday_middleware"
 gem "hashie"
+gem 'qiniu-rs'

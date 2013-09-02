@@ -8,7 +8,17 @@ require 'json'
 class Douban
 
   attr_reader :songs_json
-  attr_reader :songs
+  # attr_reader :songs
+  attr_reader :downloaded_songs
+  attr_reader :downloading_song
+  attr_reader :uploading_song
+  attr_reader :status
+
+  def initialize
+    @downloaded_songs = []
+    @status = 'not start'
+    
+  end
 
   def self.full_url(path)
     path.sub!(/^\//, "")
@@ -32,12 +42,13 @@ class Douban
     end
   end
 
-  def get_songs
+  def songs()
     cookie = []
     @cookie.each do |key, value|
       cookie << "#{key}=\"#{value}\""
     end
 
+    p 'get songs'
     res = Douban.connection("/j/mine/playlist", true).get do |req|
       req.headers['Cookie'] = cookie.join("; ")
       req.params = {
@@ -51,8 +62,7 @@ class Douban
       }
     end
 
-    @songs_json = res.body.to_hash.to_json
-    @songs = []
+    songs = []
 
     res.body.song.each do |song|
       star_song = Douban::Song.new(
@@ -61,11 +71,12 @@ class Douban
         :album => song.albumtitle,
         :title => song.title,
         :artist => song.artist,
-        :url => song.url,
-        :picture => song.picture
-      )
-      @songs << star_song
+        :url => song.url
+        )
+      songs << star_song
     end
+
+    songs
   end
 
   def captcha
@@ -109,5 +120,21 @@ class Douban
   def login_error
     @login_error
   end
-end
 
+  def upload
+    @status = 'uploading'
+    Thread.new do
+      self.songs.each do |song|
+        if !@downloaded_songs.include?(song.sid)
+          puts "Downloading 《#{song.title} - #{song.artist}》..."
+          song.save_to("tmp/song.mp3")
+          @uploading_song = song
+          @status = "uploading"
+          song.upload
+          @downloaded_songs << song.sid
+        end
+      end
+      @status = 'done'
+    end
+  end
+end

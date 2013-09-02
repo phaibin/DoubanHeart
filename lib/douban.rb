@@ -17,7 +17,7 @@ class Douban
   def initialize
     @downloaded_songs = []
     @status = 'not start'
-    
+    @downloaded_songs = File.readlines('tmp/downloaded_list.txt').map {|line| line.chomp }
   end
 
   def self.full_url(path)
@@ -124,14 +124,16 @@ class Douban
   def upload
     @status = 'uploading'
     Thread.new do
-      self.songs.each do |song|
-        if !@downloaded_songs.include?(song.sid)
-          puts "Downloading 《#{song.title} - #{song.artist}》..."
-          song.save_to("tmp/song.mp3")
-          @uploading_song = song
-          @status = "uploading"
-          song.upload
-          @downloaded_songs << song.sid
+      while @downloaded_songs.count < 1628
+        self.songs.each do |song|
+          if !@downloaded_songs.include?(song.sid)
+            puts "Downloading 《#{song.title} - #{song.artist}》..."
+            song.save_to("tmp/song.mp3")
+            @uploading_song = song
+            @status = "uploading"
+            song.upload
+            @downloaded_songs << song.sid
+          end
         end
       end
       @status = 'done'

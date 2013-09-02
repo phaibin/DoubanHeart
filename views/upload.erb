@@ -39,6 +39,7 @@
   $("#upload").click(function() {
     $.post("/upload", function(data, textStatus) {
       $("#result").text(data);
+      progress();
     });
   });
   $.get("/status", function(data) {

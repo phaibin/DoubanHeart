@@ -10,16 +10,20 @@ class MyApp < Sinatra::Base
   progress = 0
 
   get '/' do
+    erb :fm
+  end  
+
+  get '/login' do
     captcha_url = douban.captcha
     puts captcha_url
-    erb :index, :locals => {
+    erb :login, :locals => {
       :captcha_url => captcha_url
     }
   end
 
-  post '/' do
+  post '/login' do
     douban.login(params[:username], params[:password], params[:captcha])
-    redirect to('/fm')
+    redirect '/'
   end
 
   get '/upload' do
@@ -54,7 +58,4 @@ class MyApp < Sinatra::Base
     song
   end
 
-  get '/fm' do
-    erb :fm
-  end  
 end

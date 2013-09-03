@@ -22,7 +22,7 @@ end
 
 class Douban
   class Song < JSONable
-    attr_accessor :sid, :album, :title, :artist, :url, :picture
+    attr_accessor :sid, :album, :title, :artist, :picture, :douban_url, :url, :company
     attr_reader :save_path, :year
 
     def initialize(attrs)
@@ -39,7 +39,7 @@ class Douban
       # remove tailling slash
       @save_path = "#{path.chomp("/")}/#{self.title}.mp3"
 
-      res = Douban.connection(@url).get
+      res = Douban.connection(@douban_url).get
 
       File.open(path, "wb") do |f|
         f.write(res.body)
@@ -50,15 +50,19 @@ class Douban
       bucket = 'phaibin'
       upload_token = Qiniu::RS.generate_upload_token :scope              => bucket
       p "uploading"
-      result = Qiniu::RS.upload_file :uptoken            => upload_token,
-      :file               => "tmp/song.mp3",
-      :bucket             => bucket,
-      :key                => "#{sid}.mp3"
-      File.open('tmp/downloaded_list.txt', 'a') do |f|
-        f.puts @sid
+      begin
+        result = Qiniu::RS.upload_file :uptoken            => upload_token,
+        :file               => "tmp/song.mp3",
+        :bucket             => bucket,
+        :key                => "#{sid}.mp3"
+        File.open('tmp/downloaded_list.txt', 'a') do |f|
+          f.puts @sid
+        end
+        p "done"
+        p result
+      rescue Exception => e
+        puts e.message
       end
-      p "done"
-      p result
     end
   end
 end

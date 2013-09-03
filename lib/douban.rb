@@ -8,16 +8,19 @@ require 'json'
 class Douban
 
   attr_reader :songs_json
-  # attr_reader :songs
+  attr_reader :currnet_songs
   attr_reader :downloaded_songs
   attr_reader :downloading_song
   attr_reader :uploading_song
   attr_reader :status
 
   def initialize
+    @current_songs = []
+    @current_index = 0
     @downloaded_songs = []
     @status = 'not start'
     @downloaded_songs = File.readlines('tmp/downloaded_list.txt').map {|line| line.chomp }
+    # p @downloaded_songs
   end
 
   def self.full_url(path)
@@ -62,7 +65,7 @@ class Douban
       }
     end
 
-    songs = []
+    @current_songs.clear
 
     res.body.song.each do |song|
       star_song = Douban::Song.new(
@@ -71,12 +74,30 @@ class Douban
         :album => song.albumtitle,
         :title => song.title,
         :artist => song.artist,
-        :url => song.url
+        :company => song.company,
+        :douban_url => song.url,
+        :picture => song.picture,
+        :url => "http://phaibin.qiniudn.com/#{song.sid}.mp3"
         )
-      songs << star_song
+      @current_songs << star_song
     end
+    @current_index = 0
+    @current_songs
+  end
 
-    songs
+  def next
+    p 'next'
+    if @current_index == @current_songs.length
+      self.songs
+    else
+      @current_index += 1
+    end
+    p @current_index
+    @current_songs[@current_index]
+  end
+
+  def get_songs
+    self.songs[0]
   end
 
   def captcha

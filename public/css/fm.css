@@ -33,6 +33,10 @@ a, a:hover {
   text-decoration: none;
 }
 
+div {
+  margin: 20px;
+}
+
 audio {
   display: inline-block;
   *display: inline;

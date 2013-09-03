@@ -18,6 +18,7 @@
       playing = false;
       npAction = $('#npAction'),
       npTitle = $('#npTitle'),
+      picture = $('#picture'),
 
       audio = $('#audio1').bind('play', function() {
         playing = true;
@@ -28,6 +29,10 @@
       }).bind('ended', function() {
         npAction.text('Paused:');
         loadTrack();
+      }).bind('error', function() {
+        setTimeout(function() {
+          loadTrack();
+        }, 2000);
       }).get(0);
 
       btnPrev = $('#btnPrev').click(function() {
@@ -40,18 +45,20 @@
         loadTrack();
       });
 
-      loadTrack = function() {
-        $.get("/next", {}, function(data, textStatus) {
+      loadTrack = function(url) {
+        url = typeof url !== 'undefined' ? url : '/next';
+        $.get(url, {}, function(data, textStatus) {
           audio.src = data.url;
-          npTitle.text(data.title);
+          npTitle.text(data.title + ' - ' + data.artist);
+          picture.attr('src', data.picture);
           audio.play();
         }, "json");
       };
 
-      // loadTrack();
+      loadTrack("/heart");
     }
   });
-  </script>
+</script>
 </head>
 <body>
   <div id="container">
@@ -60,10 +67,13 @@
         <div id="nowPlay" class="is-audio">
           <h3 id="npAction">Paused:</h3>
           <div id="npTitle"></div>
+          <div>
+            <img id="picture" src="" alt="">
+          </div>
         </div>
         <div id="audiowrap">
           <div id="audio0">
-            <audio id="audio1" controls="controls" src="http://mr3.douban.com/201308290919/98ddae0e3cbdf1be94b6a83baedc5b5d/view/song/small/p529745.mp3" type="audio/mp3" >
+            <audio id="audio1" controls="controls" src="http://phaibin.qiniudn.com/642359.mp3" type="audio/mp3" >
               Your browser does not support the HTML5 Audio Tag.
             </audio>
           </div>
@@ -76,8 +86,7 @@
     </div>
   </div>
   <script>
-  new MediaElementPlayer('audio1',{mode:'shim'});
-  $('audio,video').mediaelementplayer({mode:'shim'});
+  $('audio,video').mediaelementplayer();
   </script>
 </body>
 </html>

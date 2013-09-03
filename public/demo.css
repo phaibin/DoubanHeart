@@ -1,3 +1,0 @@
-a[href][rel~=noreferrer]:after {
-    content: "^";
-}

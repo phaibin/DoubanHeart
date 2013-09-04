@@ -74,6 +74,11 @@ div#npTitle {
   padding: 0 0 10px 15px;
 }
 
+img#picture {
+  width: 121px;
+  height: 121px;
+}
+
 div#container {
   position: relative;
   min-height: 100%;

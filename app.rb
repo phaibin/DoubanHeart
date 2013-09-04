@@ -26,9 +26,9 @@ class MyApp < Sinatra::Base
     redirect '/'
   end
 
-  get '/upload' do
-    erb :upload
-  end
+  # get '/upload' do
+  #   erb :upload
+  # end
 
   get '/status' do
     content_type :json
@@ -39,10 +39,16 @@ class MyApp < Sinatra::Base
     {status:douban.status, progress:uploading_song}.to_json
   end
 
-  post '/upload' do
-    douban.upload
-    'start upload!'
-  end
+  # post '/upload' do
+  #   p params
+  #   sid = params[:sid]
+  #   if sid
+  #     missing_song = douban.current_songs.select { |song| song.sid == sid }.first
+  #     if missing_song
+  #       missing_song.upload
+  #     end
+  #   end
+  # end
 
   get '/heart' do
     content_type :json
@@ -54,6 +60,13 @@ class MyApp < Sinatra::Base
   get '/next' do
     content_type :json
     song = douban.next.to_json
+    p song
+    song
+  end
+
+  get '/prev' do
+    content_type :json
+    song = douban.prev.to_json
     p song
     song
   end

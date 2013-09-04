@@ -7,58 +7,10 @@
   <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" media="screen">
   <link rel="stylesheet" type="text/css" href="/css/fm.css" media="screen">
   <link href="/css/bootstrap-responsive.css" rel="stylesheet">
-  <script src="/js/jquery.js"></script>
+  <script src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/mediaelement-and-player.min.js"></script>
   <link rel="stylesheet" href="/css/mediaelementplayer.min.css" />
-  <script type="text/javascript">
-  jQuery(function($) {
-    var supportsAudio = !!document.createElement('audio').canPlayType;
-    if(supportsAudio) {
-      playing = false;
-      npAction = $('#npAction'),
-      npTitle = $('#npTitle'),
-      picture = $('#picture'),
-
-      audio = $('#audio1').bind('play', function() {
-        playing = true;
-        npAction.text('Now Playing:');
-      }).bind('pause', function() {
-        playing = false;
-        npAction.text('Paused:');
-      }).bind('ended', function() {
-        npAction.text('Paused:');
-        loadTrack();
-      }).bind('error', function() {
-        setTimeout(function() {
-          loadTrack();
-        }, 2000);
-      }).get(0);
-
-      btnPrev = $('#btnPrev').click(function() {
-       audio.pause();
-       loadTrack();
-     });
-
-      btnNext = $('#btnNext').click(function() {
-        audio.pause();
-        loadTrack();
-      });
-
-      loadTrack = function(url) {
-        url = typeof url !== 'undefined' ? url : '/next';
-        $.get(url, {}, function(data, textStatus) {
-          audio.src = data.url;
-          npTitle.text(data.title + ' - ' + data.artist);
-          picture.attr('src', data.picture);
-          audio.play();
-        }, "json");
-      };
-
-      loadTrack("/heart");
-    }
-  });
-</script>
 </head>
 <body>
   <div id="container">
@@ -73,7 +25,7 @@
         </div>
         <div id="audiowrap">
           <div id="audio0">
-            <audio id="audio1" controls="controls" src="http://phaibin.qiniudn.com/642359.mp3" type="audio/mp3" >
+            <audio id="audio1" controls="controls" type="audio/mp3" src="http://phaibin.qiniudn.com/542959.mp3" >
               Your browser does not support the HTML5 Audio Tag.
             </audio>
           </div>
@@ -86,7 +38,61 @@
     </div>
   </div>
   <script>
-  $('audio,video').mediaelementplayer();
-  </script>
+  jQuery(function($) {
+    var npAction = $('#npAction');
+    var npTitle = $('#npTitle');
+    var picture = $('#picture');
+    var player = new MediaElementPlayer('#audio1', {
+      success: function (mediaElement, domObject) {   
+       // add event listeners
+       mediaElement.addEventListener('ended', function(e) {
+         npAction.text('Paused:');
+         loadTrack();
+       }, false);
+
+       mediaElement.addEventListener('pause', function(e) {
+        npAction.text('Paused:');
+      }, false);
+
+       mediaElement.addEventListener('play', function(e) {
+        npAction.text('Now Playing:');
+      }, false);
+
+       mediaElement.addEventListener('error', function(e) {
+        $.post('/upload', {'sid':$('#nowPlay').attr('sid')});
+        setTimeout(function() {
+          loadTrack();
+        }, 2000);
+      }, false);
+     }
+   });
+
+    btnPrev = $('#btnPrev').click(function() {
+     player.pause();
+     loadTrack('/prev');
+   });
+
+    btnNext = $('#btnNext').click(function() {
+      player.pause();
+      loadTrack();
+    });
+
+    loadTrack = function(url) {
+      url = typeof url !== 'undefined' ? url : '/next';
+      $.get(url, function(data, textStatus) {
+        player.setSrc(data.url);
+        $('#nowPlay').attr('sid', data.sid);
+        npTitle.text(data.title + ' - ' + data.artist);
+        picture.attr('src', data.picture);
+        player.play();
+      }, "json");
+    };
+
+    // wait 800ms to fix firefox error
+    setTimeout(function() {
+      loadTrack("/heart");
+    }, 800);
+  });
+</script>
 </body>
 </html>

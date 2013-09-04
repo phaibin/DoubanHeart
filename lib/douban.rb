@@ -8,7 +8,7 @@ require 'json'
 class Douban
 
   attr_reader :songs_json
-  attr_reader :currnet_songs
+  attr_reader :current_songs
   attr_reader :downloaded_songs
   attr_reader :downloading_song
   attr_reader :uploading_song
@@ -68,18 +68,20 @@ class Douban
     @current_songs.clear
 
     res.body.song.each do |song|
-      star_song = Douban::Song.new(
-        :sid => song.sid,
-        :year => song.public_time,
-        :album => song.albumtitle,
-        :title => song.title,
-        :artist => song.artist,
-        :company => song.company,
-        :douban_url => song.url,
-        :picture => song.picture,
-        :url => "http://phaibin.qiniudn.com/#{song.sid}.mp3"
-        )
-      @current_songs << star_song
+      if !song.sid.start_with?('da') && !song.url.end_with?('.flv')
+        star_song = Douban::Song.new(
+          :sid => song.sid,
+          :year => song.public_time,
+          :album => song.albumtitle,
+          :title => song.title,
+          :artist => song.artist,
+          :company => song.company,
+          :douban_url => song.url,
+          :picture => song.picture,
+          :url => "http://phaibin.qiniudn.com/#{song.sid}.mp3"
+          )
+        @current_songs << star_song
+      end
     end
     @current_index = 0
     @current_songs
@@ -91,6 +93,17 @@ class Douban
       self.songs
     else
       @current_index += 1
+    end
+    p @current_index
+    @current_songs[@current_index]
+  end
+
+  def prev
+    p 'prev'
+    if @current_index == 0
+      self.songs
+    else
+      @current_index -= 1
     end
     p @current_index
     @current_songs[@current_index]

@@ -47,21 +47,32 @@ class Douban
     end
 
     def upload
-      bucket = 'phaibin'
-      upload_token = Qiniu::RS.generate_upload_token :scope              => bucket
-      p "uploading"
-      begin
-        result = Qiniu::RS.upload_file :uptoken            => upload_token,
-        :file               => "tmp/song.mp3",
-        :bucket             => bucket,
-        :key                => "#{sid}.mp3"
-        File.open('tmp/downloaded_list.txt', 'a') do |f|
-          f.puts @sid
+      Thread.new do
+        puts "Downloading 《#{@title} - #{@artist}》..."
+        self.save_to("tmp/song.mp3")
+
+        bucket = 'phaibin'
+        key = "#{sid}.mp3"
+        upload_token = Qiniu::RS.generate_upload_token :scope              => bucket
+        p "uploading"
+        begin
+          result = Qiniu::RS.upload_file :uptoken            => upload_token,
+          :file               => "tmp/song.mp3",
+          :bucket             => bucket,
+          :key                => key
+          File.open('tmp/downloaded_list.txt', 'a') do |f|
+            f.puts @sid
+          end
+          p "done"
+          p result
+        rescue Exception => e
+          puts e.message
+          if e.message.include? '614'
+            p 'file exists'
+            Qiniu::RS.delete(bucket, key)
+            self.upload
+          end
         end
-        p "done"
-        p result
-      rescue Exception => e
-        puts e.message
       end
     end
   end

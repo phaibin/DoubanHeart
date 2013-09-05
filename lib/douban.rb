@@ -77,7 +77,7 @@ class Douban
           :artist => song.artist,
           :company => song.company,
           :douban_url => song.url,
-          :picture => song.picture,
+          :picture => song.picture.gsub(/mpic/, 'lpic'),
           :url => "http://phaibin.qiniudn.com/#{song.sid}.mp3"
           )
         @current_songs << star_song

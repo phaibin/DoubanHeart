@@ -4,8 +4,6 @@ GEM
     addressable (2.2.8)
     backports (3.3.0)
     bcrypt-ruby (3.0.1)
-    chronic_duration (0.10.2)
-      numerizer (~> 0.1.1)
     daemons (1.1.9)
     data_mapper (1.2.0)
       dm-aggregates (~> 1.2.0)
@@ -69,7 +67,6 @@ GEM
       backports
     multi_json (1.7.3)
     multipart-post (1.2.0)
-    numerizer (0.1.1)
     pg (0.15.1)
     qiniu-rs (3.4.5)
       json (~> 1.7)
@@ -108,7 +105,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  chronic_duration
   data_mapper
   dm-postgres-adapter
   faraday

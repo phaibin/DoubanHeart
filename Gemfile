@@ -6,8 +6,6 @@ gem 'thin'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 gem 'pg'
-gem 'chronic_duration'
-
 gem "faraday"
 gem "faraday_middleware"
 gem "hashie"

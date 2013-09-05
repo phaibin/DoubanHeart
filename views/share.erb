@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="/css/mediaelementplayer.min.css" />
+<link rel="stylesheet" type="text/css" href="/css/fm.css" media="screen">
+
+<div>此页地址可以直接发送给好友</div>
+
+<h2 id="npAction">Paused:</h2>
+
+<div id="npTitle"><%= song.title + ' - ' + song.artist %></div>
+<div class="text-center">
+  <img id="picture" src="<%= song.picture %>" alt="">
+</div>
+
+<div id="audio0" class="text-center">
+  <audio id="audio1" controls="controls" type="audio/mp3" src="http://phaibin.qiniudn.com/542959.mp3">
+    Your browser does not support the HTML5 Audio Tag.
+  </audio>
+</div>
+
+<script src="/js/bootstrap-switch.js"></script>
+<script src="/js/mediaelement-and-player.min.js"></script>
+<script>
+jQuery(function($) {
+  var npAction = $('#npAction');
+  var npTitle = $('#npTitle');
+  var picture = $('#picture');
+  var share = $('#share');
+  var player = new MediaElementPlayer('#audio1', {
+    success: function (mediaElement, domObject) {   
+       // add event listeners
+       mediaElement.addEventListener('ended', function(e) {
+        player.play();
+      }, false);
+
+       mediaElement.addEventListener('pause', function(e) {
+        npAction.text('Paused:');
+      }, false);
+
+       mediaElement.addEventListener('play', function(e) {
+        npAction.text('Now Playing:');
+      }, false);
+     }
+   });
+
+    // wait 800ms to fix firefox error
+    setTimeout(function() {
+      player.setSrc("<%= song.url %>");
+    }, 800);
+  });
+</script>

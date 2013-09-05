@@ -10,13 +10,16 @@ class MyApp < Sinatra::Base
   progress = 0
 
   get '/' do
-    erb :fm
+    erb :fm, :locals => {
+      :title => '我的红心电台'
+    }
   end  
 
   get '/login' do
     captcha_url = douban.captcha
     puts captcha_url
     erb :login, :locals => {
+      :title => '登录',
       :captcha_url => captcha_url
     }
   end
@@ -39,16 +42,16 @@ class MyApp < Sinatra::Base
     {status:douban.status, progress:uploading_song}.to_json
   end
 
-  # post '/upload' do
-  #   p params
-  #   sid = params[:sid]
-  #   if sid
-  #     missing_song = douban.current_songs.select { |song| song.sid == sid }.first
-  #     if missing_song
-  #       missing_song.upload
-  #     end
-  #   end
-  # end
+  post '/upload' do
+    p params
+    sid = params[:sid]
+    if sid
+      missing_song = douban.current_songs.select { |song| song.sid == sid }.first
+      if missing_song
+        missing_song.upload
+      end
+    end
+  end
 
   get '/heart' do
     content_type :json
@@ -69,6 +72,16 @@ class MyApp < Sinatra::Base
     song = douban.prev.to_json
     p song
     song
+  end
+
+  get '/share/:sid' do |sid|
+    share_song = douban.current_songs.select { |song| song.sid == sid }.first
+    if share_song
+      erb :share, :locals => {
+        :title => '分享',
+        :song => share_song
+      }
+    end
   end
 
 end

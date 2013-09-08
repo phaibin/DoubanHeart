@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'json'
 require 'qiniu-rs'
+require 'data_mapper'
 
 Qiniu::RS.establish_connection! :access_key => '9JuX5BIaZO4QyxU5YAotD6tn5tSEH3Yk1RhqLg5h',
 :secret_key => 'TAp6SEFpzdoQ3ZNxeke3u60rY3H-GTqZliwXyWKL'
@@ -22,17 +23,23 @@ end
 
 class Douban
   class Song < JSONable
-    attr_accessor :sid, :album, :title, :artist, :picture, :douban_url, :url, :company
-    attr_reader :save_path, :year
+    include DataMapper::Resource
+
+    property :id, Serial
+    property :sid, String
+    property :album, String
+    property :title, String
+    property :artist, String
+    property :picture, String, :length=>150
+    property :douban_url, String, :length=>150
+    property :url, String, :length=>150
+    property :company, String
+    property :year, Integer
 
     def initialize(attrs)
       attrs.each do |key, value|
         send("#{key}=", value)
       end
-    end
-
-    def year=(year)
-      @year = year.to_i
     end
 
     def save_to(path)

@@ -2,6 +2,10 @@ require 'sinatra/base'
 require 'rack'
 require './lib/douban'
 require 'json'
+require 'data_mapper'
+
+DataMapper.setup(:default, 'postgres://localhost/douban_heart')
+DataMapper.finalize.auto_upgrade!
 
 class MyApp < Sinatra::Base
 
@@ -75,7 +79,7 @@ class MyApp < Sinatra::Base
   end
 
   get '/share/:sid' do |sid|
-    share_song = douban.current_songs.select { |song| song.sid == sid }.first
+    share_song = Douban::Song.first(:sid=>sid)
     if share_song
       erb :share, :locals => {
         :title => '分享',

@@ -46,6 +46,10 @@ class Douban
   end
 
   def songs()
+    if !self.logined?
+      return []
+    end
+
     cookie = []
     @cookie.each do |key, value|
       cookie << "#{key}=\"#{value}\""
@@ -69,9 +73,10 @@ class Douban
 
     res.body.song.each do |song|
       if !song.sid.start_with?('da') && !song.url.end_with?('.flv')
-        star_song = Douban::Song.new(
+        star_song = Douban::Song.first_or_create(:sid=>song.sid)
+        star_song.update(
           :sid => song.sid,
-          :year => song.public_time,
+          :year => song.public_time.to_i,
           :album => song.albumtitle,
           :title => song.title,
           :artist => song.artist,
@@ -88,6 +93,10 @@ class Douban
   end
 
   def next
+    if !self.logined?
+      return nil
+    end
+
     p 'next'
     if @current_index == @current_songs.length
       self.songs
@@ -99,6 +108,10 @@ class Douban
   end
 
   def prev
+    if !self.logined?
+      return nil
+    end
+
     p 'prev'
     if @current_index == 0
       self.songs
@@ -153,6 +166,10 @@ class Douban
 
   def login_error
     @login_error
+  end
+
+  def logined?
+    @cookie && @cookie.count > 0
   end
 
   def upload

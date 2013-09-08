@@ -4,7 +4,8 @@ require './lib/douban'
 require 'json'
 require 'data_mapper'
 
-DataMapper.setup(:default, 'postgres://localhost/douban_heart')
+# DataMapper.setup(:default, 'postgres://localhost/douban_heart')
+DataMapper.setup(:default, 'postgres://tiyztkheycvydy:l61kx7QxzGtEC91t8Jlif3keHV@ec2-54-221-196-140.compute-1.amazonaws.com:5432/d7gmt60spua9dn')
 DataMapper.finalize.auto_upgrade!
 
 class MyApp < Sinatra::Base

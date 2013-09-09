@@ -21,6 +21,11 @@ class Douban
     @status = 'not start'
     @downloaded_songs = File.readlines('tmp/downloaded_list.txt').map {|line| line.chomp }
     # p @downloaded_songs
+    if File.exists?("tmp/cookie")
+      File.open("tmp/cookie", "r") do |f|
+        @cookie = {"dbcl2" => f.read}
+      end
+    end
   end
 
   def self.full_url(path)
@@ -158,10 +163,15 @@ class Douban
   end
 
   def set_cookie(cookie)
+    p cookie
     cookie = CGI::Cookie::parse(cookie)
+    dbcl2 = cookie["dbcl2"][0].gsub!(/\"/, "").gsub(/ /, "+")
     @cookie = {
-      "dbcl2" => cookie["dbcl2"][0].gsub!(/\"/, "").gsub(/ /, "+")
+      "dbcl2" => dbcl2
     }
+    File.open("tmp/cookie", "w") do |f|
+      f.write(dbcl2)
+    end
   end
 
   def login_error
